@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import globalErrorHandler from './controllers/errorController.js'
+import userRoutes from './routes/userRoutes.js'
 
 dotenv.config({path: './config.env'})
 
