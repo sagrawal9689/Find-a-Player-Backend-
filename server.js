@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import globalErrorHandler from './controllers/errorController.js'
 import userRoutes from './routes/userRoutes.js'
+import postRoutes from './routes/postRoutes.js'
 
 dotenv.config({path: './config.env'})
 
@@ -18,6 +19,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/api/users',userRoutes)
+app.use('/api/posts',postRoutes)
 
 app.use(globalErrorHandler)
 
