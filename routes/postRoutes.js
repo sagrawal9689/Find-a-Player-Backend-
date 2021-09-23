@@ -1,9 +1,10 @@
 import express from 'express'
 const router = express.Router()
 import {
-  getPosts
+  getPosts,
+  createPost
 } from '../controllers/postController.js'
 
-router.route('/').get(getPosts)
+router.route('/').get(getPosts).post(createPost)
 
 export default router

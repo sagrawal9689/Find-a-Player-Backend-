@@ -5,7 +5,7 @@ const postSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      // required: true,
       ref: 'User',
     },
     gameName: {
@@ -13,15 +13,15 @@ const postSchema = mongoose.Schema(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
     from: {
-      type: Date,
+      type: String,
       required: true,
     },
     to: {
-        type: Date,
+        type: String,
         required: true,
     },  
     playersRequired: {
