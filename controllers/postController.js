@@ -13,12 +13,15 @@ const createPost= catchAsync(async(req,res,next)=>{
 
     // console.log(from,to)
 
+    const image= `/api/images/${gameName}.jpg`;
+
     const post = await Post.create({
         gameName,
         date,
         from,
         to,
-        playersRequired
+        playersRequired,
+        image
     })
 
     res.json({

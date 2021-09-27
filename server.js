@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
@@ -22,6 +23,8 @@ app.use('/api/users',userRoutes)
 app.use('/api/posts',postRoutes)
 
 app.use(globalErrorHandler)
+const __dirname = path.resolve()
+app.use('/api/images', express.static(path.join(__dirname , '/Images')));
 
 const PORT = process.env.PORT || 5000
 
