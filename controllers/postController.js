@@ -3,7 +3,15 @@ import catchAsync from './../utils/catchAsync.js'
 import AppError from './../utils/appError.js'
 
 const getPosts= catchAsync(async(req,res,next)=>{
-    const posts= await Post.find();
+
+    const keyword= req.query.keyword? {
+        gameName: {
+            $regex: req.query.keyword,
+            $options: 'i'
+        }
+    }: {};
+
+    const posts= await Post.find(keyword);
 
     res.json({ posts })
 })
