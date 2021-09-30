@@ -20,8 +20,12 @@ const createPost= catchAsync(async(req,res,next)=>{
     const { gameName, date , from , to ,playersRequired } = req.body
 
     // console.log(from,to)
+    
+    let editedGameName= gameName.split(' ')[0];
 
-    const image= `/api/images/${gameName}.jpg`;
+    editedGameName= editedGameName.toLowerCase(editedGameName)
+
+    let image= `/api/images/${editedGameName}.jpg`;
 
     const post = await Post.create({
         gameName,
