@@ -19,7 +19,7 @@ const getPosts= catchAsync(async(req,res,next)=>{
 const createPost= catchAsync(async(req,res,next)=>{
     const { gameName, date , from , to ,playersRequired } = req.body
 
-    // console.log(from,to)
+    // console.log(req.user);
     
     let editedGameName= gameName.split(' ')[0];
 
@@ -33,7 +33,8 @@ const createPost= catchAsync(async(req,res,next)=>{
         from,
         to,
         playersRequired,
-        image
+        image,
+        user: req.user._id 
     })
 
     res.json({
