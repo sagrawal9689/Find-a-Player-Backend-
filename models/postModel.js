@@ -5,7 +5,7 @@ const postSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      // required: true,
+      required: true,
       ref: 'User',
     },
     gameName: {
@@ -32,7 +32,23 @@ const postSchema = mongoose.Schema(
     image: {
       type: String,
       default: ""
-    }
+    },
+    request: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'User',
+        },
+        gameID:{
+          type: String,
+          required: true
+        },
+        phoneNumber:{
+          type: Number
+        }
+      }
+    ]
   },
   {
     timestamps: true,
