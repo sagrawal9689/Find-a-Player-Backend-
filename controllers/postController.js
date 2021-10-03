@@ -80,7 +80,7 @@ const getUserPosts= catchAsync(async(req,res,next)=>{
         return container;
     })
 
-    res.json(usersPosts)
+    res.json({posts: usersPosts})
 })
 
 export{
