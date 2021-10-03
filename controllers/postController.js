@@ -28,7 +28,7 @@ const getPosts= catchAsync(async(req,res,next)=>{
         return container;
     })
 
-    res.json(postsRefined)
+    res.json({ posts: postsRefined})
 })
 
 const createPost= catchAsync(async(req,res,next)=>{
