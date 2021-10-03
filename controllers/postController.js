@@ -14,9 +14,19 @@ const getPosts= catchAsync(async(req,res,next)=>{
 
     const posts= await Post.find(keyword);
 
-    const { gameName, date , from , to ,playersRequired } = posts;
+    const postsRefined= posts.map(item => {
+        const container = {};
+        
+        container.gameName= item.gameName;
+        container.date= item.date;
+        container.from= item.from;
+        container.to= item.to;
+        container.image= item.image
+        
+        return container;
+    })
 
-    res.json({ gameName,date,from,to,playersRequired ,image})
+    res.json(postsRefined)
 })
 
 const createPost= catchAsync(async(req,res,next)=>{
