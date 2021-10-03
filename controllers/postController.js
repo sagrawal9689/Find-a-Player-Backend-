@@ -23,6 +23,7 @@ const getPosts= catchAsync(async(req,res,next)=>{
         container.to= item.to;
         container.image= item.image
         container._id= item._id
+        container.playersRequired= item.playersRequired
 
         return container;
     })
