@@ -1,6 +1,7 @@
 import Post from './../models/postModel.js'
 import catchAsync from './../utils/catchAsync.js'
 import AppError from './../utils/appError.js'
+import mongoose from 'mongoose'
 
 const getPosts= catchAsync(async(req,res,next)=>{
 
@@ -13,7 +14,9 @@ const getPosts= catchAsync(async(req,res,next)=>{
 
     const posts= await Post.find(keyword);
 
-    res.json({ posts })
+    const { gameName, date , from , to ,playersRequired } = posts;
+
+    res.json({ gameName,date,from,to,playersRequired ,image})
 })
 
 const createPost= catchAsync(async(req,res,next)=>{
@@ -42,7 +45,34 @@ const createPost= catchAsync(async(req,res,next)=>{
     })    
 })
 
+const getUserPosts= catchAsync(async(req,res,next)=>{
+
+    // console.log(req.params.id,req.user._id)
+    if(!req.user._id.equals(req.params.id))
+    return next(new AppError('You are not authorized to view this page', 403));
+
+    const userId= mongoose.Types.ObjectId(req.params.id);
+
+    // console.log(userId)
+
+    const posts= await Post.find({ user: userId })
+
+    const usersPosts = posts.map(item => {
+        const container = {};
+        
+        container.gameName= item.gameName;
+        container.date= item.date;
+        container.from= item.from;
+        container.to= item.to;
+        
+        return container;
+    })
+
+    res.json(usersPosts)
+})
+
 export{
     getPosts,
-    createPost
+    createPost,
+    getUserPosts
 }
