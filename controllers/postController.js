@@ -76,6 +76,7 @@ const getUserPosts= catchAsync(async(req,res,next)=>{
         container.date= item.date;
         container.from= item.from;
         container.to= item.to;
+        container._id= item._id
         
         return container;
     })

@@ -1,7 +1,7 @@
 import Post from './../models/postModel.js'
 import catchAsync from './../utils/catchAsync.js'
 import AppError from './../utils/appError.js'
-
+import mongoose from 'mongoose'
 const addRequest= catchAsync(async(req,res,next)=>{
 
     const { gameID, phoneNumber }= req.body;
@@ -43,6 +43,18 @@ const addRequest= catchAsync(async(req,res,next)=>{
     res.send(updatedPost)
 })
 
+const getRequest= catchAsync(async(req,res,next)=>{
+    
+    const postId= mongoose.Types.ObjectId(req.body.postId);
+
+    const post= await Post.findOne({ _id : postId })
+
+    // console.log(post)
+
+    res.json({request: post.request})
+})
+
 export{
-    addRequest
+    addRequest,
+    getRequest
 }
