@@ -5,14 +5,17 @@ import {
   createPost,
   getUserPosts
 } from '../controllers/postController.js'
-import { addRequest } from './../controllers/requestController.js';
+import { addRequest, getRequest } from './../controllers/requestController.js';
 
 import { protect } from '../middlewares/authMiddleware.js'
 
 router.route('/').get(getPosts).post(protect,createPost)
 
-router.route('/:id').get(protect,getUserPosts)
+router.route('/request').get(protect,getRequest)
+
 
 router.route('/request/:id').post(protect, addRequest)
+
+router.route('/:id').get(protect,getUserPosts)
 
 export default router
