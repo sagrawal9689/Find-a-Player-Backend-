@@ -2,6 +2,7 @@ import Post from './../models/postModel.js'
 import catchAsync from './../utils/catchAsync.js'
 import AppError from './../utils/appError.js'
 import mongoose from 'mongoose'
+import url from 'url'
 const addRequest= catchAsync(async(req,res,next)=>{
 
     const { gameID, phoneNumber }= req.body;
@@ -45,7 +46,17 @@ const addRequest= catchAsync(async(req,res,next)=>{
 
 const getRequest= catchAsync(async(req,res,next)=>{
     
-    const postId= mongoose.Types.ObjectId(req.body.postId);
+    
+    const queryObject = url.parse(req.url,true).query;
+    // console.log(queryObject);
+
+    // console.log(queryObject.postId)
+
+    let postId= queryObject.postId
+    // console.log(postId)
+
+    postId= mongoose.Types.ObjectId(String(postId));
+    
 
     const post= await Post.findOne({ _id : postId })
 
