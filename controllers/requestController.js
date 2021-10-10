@@ -65,7 +65,40 @@ const getRequest= catchAsync(async(req,res,next)=>{
     res.json({request: post.request})
 })
 
+const approveRequest= catchAsync(async(req,res,next)=>{
+    
+    
+    let{ postId, requestId ,status}= req.body;
+
+    postId= mongoose.Types.ObjectId(String(postId));
+    requestId= mongoose.Types.ObjectId(String(requestId));
+    
+
+    const post= await Post.findOne({ _id : postId })
+
+    if(!post.user.equals(req.user._id))
+    {
+        return new AppError("This request dosent belong to you", 403);
+    }
+
+    // console.log(post)
+
+    const idx= post.request.findIndex((req)=> req._id.equals(requestId))
+
+    // console.log(idx)
+
+    if(idx!=-1 && (status==="approved" || status==="declined"))
+    {
+        post.request[idx].status= status;
+    }
+
+    await post.save()
+
+    res.json("success");
+})
+
 export{
     addRequest,
-    getRequest
+    getRequest,
+    approveRequest
 }

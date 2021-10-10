@@ -5,7 +5,7 @@ import {
   createPost,
   getUserPosts
 } from '../controllers/postController.js'
-import { addRequest, getRequest } from './../controllers/requestController.js';
+import { addRequest, getRequest , approveRequest} from './../controllers/requestController.js';
 
 import { protect } from '../middlewares/authMiddleware.js'
 
@@ -13,6 +13,7 @@ router.route('/').get(getPosts).post(protect,createPost)
 
 router.route('/request').get(protect,getRequest)
 
+router.route('/request/setstatus').post(protect,approveRequest)
 
 router.route('/request/:id').post(protect, addRequest)
 
