@@ -47,7 +47,7 @@ const postSchema = mongoose.Schema(
         phoneNumber:{
           type: Number
         },
-        approved:{
+        status:{
           type: String,
           default: "none"
         }
