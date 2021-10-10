@@ -46,6 +46,10 @@ const postSchema = mongoose.Schema(
         },
         phoneNumber:{
           type: Number
+        },
+        approved:{
+          type: String,
+          default: "none"
         }
       }
     ]
