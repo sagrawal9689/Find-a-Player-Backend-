@@ -84,8 +84,36 @@ const getUserPosts= catchAsync(async(req,res,next)=>{
     res.json({posts: usersPosts})
 })
 
+const getMyAppliedPosts= catchAsync(async(req,res,next)=>{
+
+    const { _id:userId }= req.user
+
+    // console.log(userId)
+
+    const posts= await Post.find({});
+    
+    let postAppliedByMe= posts.filter((post)=>{
+
+        return post.request.find((req)=>{
+            return req.user.equals(userId)
+        })
+    })
+
+    postAppliedByMe= postAppliedByMe.map((post)=>{
+        const { gameName, date,from,to }=post;
+        const reqIdx= post.request.findIndex((req)=> req.user.equals(userId))
+
+        const { status }= post.request[reqIdx];
+
+        return { gameName,date, from,to,status };
+    })
+
+    res.send(postAppliedByMe);
+})
+
 export{
     getPosts,
     createPost,
-    getUserPosts
+    getUserPosts,
+    getMyAppliedPosts
 }
