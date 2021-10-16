@@ -108,7 +108,7 @@ const getMyAppliedPosts= catchAsync(async(req,res,next)=>{
         return { gameName,date, from,to,status };
     })
 
-    res.send(postAppliedByMe);
+    res.send({posts: postAppliedByMe});
 })
 
 export{
