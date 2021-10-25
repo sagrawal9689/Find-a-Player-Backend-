@@ -15,3 +15,8 @@ User can approve or deny requests of the players who wants to join his team.
 * Node.js
 * Express.js
 * MongoDB
+
+## Postman
+
+https://documenter.getpostman.com/view/13203210/UV5c8aKq
+
