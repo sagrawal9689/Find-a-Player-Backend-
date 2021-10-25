@@ -2,7 +2,7 @@ import Post from './../models/postModel.js'
 import catchAsync from './../utils/catchAsync.js'
 import AppError from './../utils/appError.js'
 import mongoose from 'mongoose'
-import url from 'url'
+
 const addRequest= catchAsync(async(req,res,next)=>{
 
     const { gameID, phoneNumber }= req.body;
@@ -14,6 +14,11 @@ const addRequest= catchAsync(async(req,res,next)=>{
     const post= await Post.findOne({ _id: postId });
 
     // console.log(post)
+
+    if(!post)
+    {
+        return next(new AppError("No post found with that Id", 404));
+    }
 
     const containsCurrentUserRequest= post.request.find((currReq)=> {
         
@@ -41,64 +46,64 @@ const addRequest= catchAsync(async(req,res,next)=>{
     },
     {new: true})
 
-    res.send(updatedPost)
+    res.send(updatedPost.request)
 })
 
-const getRequest= catchAsync(async(req,res,next)=>{
-    
-    
-    const queryObject = url.parse(req.url,true).query;
-    // console.log(queryObject);
-
-    // console.log(queryObject.postId)
-
-    let postId= queryObject.postId
-    // console.log(postId)
-
-    postId= mongoose.Types.ObjectId(String(postId));
+const getRequests= catchAsync(async(req,res,next)=>{
     
 
-    const post= await Post.findOne({ _id : postId })
+    const postId= req.params.id;
+    
+
+    const post= await Post.findOne({ _id : postId , user: req.user._id})
 
     // console.log(post)
 
-    res.json({request: post.request})
+    if(!post)
+    {
+        return next(new AppError("No post found with that Id", 404));
+    }
+
+    res.send(post.request)
 })
 
 const approveRequest= catchAsync(async(req,res,next)=>{
     
     
-    let{ postId, requestId ,status}= req.body;
+    const { status }= req.body;
 
-    postId= mongoose.Types.ObjectId(String(postId));
-    requestId= mongoose.Types.ObjectId(String(requestId));
-    
+    const { postid, reqid }= req.params
 
-    const post= await Post.findOne({ _id : postId })
+    const post= await Post.findOne({ _id : postid , user: req.user._id})
 
-    if(!post.user.equals(req.user._id))
+    if(!post)
     {
-        return new AppError("This request dosent belong to you", 403);
+        return next(new AppError("No post found with that Id", 404));
     }
 
-    // console.log(post)
-
-    const idx= post.request.findIndex((req)=> req._id.equals(requestId))
+    const idx= post.request.findIndex((req)=> req._id.equals(reqid))
 
     // console.log(idx)
 
-    if(idx!=-1 && (status==="approved" || status==="declined"))
+    if(idx===-1)
     {
-        post.request[idx].status= status;
+        return next(new AppError("No request found with that Id", 404));
     }
+
+    if(!(status==="approved" || status==="declined"))
+    {
+        return next(new AppError("Give valid status", 404));
+    }
+    
+    post.request[idx].status= status;
 
     await post.save()
 
-    res.json("success");
+    res.send("success");
 })
 
 export{
     addRequest,
-    getRequest,
+    getRequests,
     approveRequest
 }

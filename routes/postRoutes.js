@@ -3,24 +3,26 @@ const router = express.Router()
 import {
   getPosts,
   createPost,
-  getUserPosts,
+  getMyPosts,
   getMyAppliedPosts
 } from '../controllers/postController.js'
-import { addRequest, getRequest , approveRequest} from './../controllers/requestController.js';
+import { addRequest, getRequests , approveRequest} from './../controllers/requestController.js';
 
 import { protect } from '../middlewares/authMiddleware.js'
 
-router.route('/').get(getPosts).post(protect,createPost)
+router.route('/posts').get(getPosts)                              // get all posts 
 
-router.route('/request').get(protect,getRequest)                    //   get all request of a particular post
+router.route('/posts/my').get(protect, getMyPosts)                // get all my posts
 
-router.route('/request/setstatus').post(protect,approveRequest)
+router.route('/post').post(protect,createPost)                    // create post
 
-router.route('/request/:id').post(protect, addRequest)               // get a single particular request belonging to a post 
+router.route('/post/:id/requests').get(protect,getRequests)         //   get all request of a post
 
-router.route('/myApplied').get(protect,getMyAppliedPosts)
+router.route('/post/:id/request').post(protect,addRequest)         //   add request on a post
 
-router.route('/:id').get(protect,getUserPosts)
+router.route('/posts/myApplied').get(protect,getMyAppliedPosts)    // get my applied posts
+
+router.route('/post/:postid/request/:reqid/setStatus').post(protect,approveRequest) 
 
 
 export default router

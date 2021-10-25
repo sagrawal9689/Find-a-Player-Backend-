@@ -3,7 +3,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import globalErrorHandler from './controllers/errorController.js'
-import userRoutes from './routes/userRoutes.js'
+import authRoutes from './routes/authRoutes.js'
 import postRoutes from './routes/postRoutes.js'
 
 dotenv.config({path: './config.env'})
@@ -19,8 +19,8 @@ app.get('/',(req,res)=>{
   res.send("Hello")
 })
 
-app.use('/api/users',userRoutes)
-app.use('/api/posts',postRoutes)
+app.use('/api/auth',authRoutes)
+app.use('/api',postRoutes)
 
 app.use(globalErrorHandler)
 const __dirname = path.resolve()

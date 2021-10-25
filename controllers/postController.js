@@ -28,13 +28,14 @@ const getPosts= catchAsync(async(req,res,next)=>{
         return container;
     })
 
-    res.json({ posts: postsRefined})
+    res.send(postsRefined)
 })
 
 const createPost= catchAsync(async(req,res,next)=>{
     const { gameName, date , from , to ,playersRequired } = req.body
 
-    // console.log(req.user);
+    if(!gameName || !date || !from || !to || !playersRequired )
+    return next(new AppError('Please provide correct info.', 400));
     
     let editedGameName= gameName.split(' ')[0];
 
@@ -52,22 +53,12 @@ const createPost= catchAsync(async(req,res,next)=>{
         user: req.user._id 
     })
 
-    res.json({
-        post
-    })    
+    res.status(201).send(post)    
 })
 
-const getUserPosts= catchAsync(async(req,res,next)=>{
+const getMyPosts= catchAsync(async(req,res,next)=>{
 
-    // console.log(req.params.id,req.user._id)
-    if(!req.user._id.equals(req.params.id))
-    return next(new AppError('You are not authorized to view this page', 403));
-
-    const userId= mongoose.Types.ObjectId(req.params.id);
-
-    // console.log(userId)
-
-    const posts= await Post.find({ user: userId })
+    const posts= await Post.find({ user: req.user._id })
 
     const usersPosts = posts.map(item => {
         const container = {};
@@ -81,7 +72,7 @@ const getUserPosts= catchAsync(async(req,res,next)=>{
         return container;
     })
 
-    res.json({posts: usersPosts})
+    res.json(usersPosts)
 })
 
 const getMyAppliedPosts= catchAsync(async(req,res,next)=>{
@@ -108,12 +99,12 @@ const getMyAppliedPosts= catchAsync(async(req,res,next)=>{
         return { gameName,date, from,to,status };
     })
 
-    res.send({posts: postAppliedByMe});
+    res.send(postAppliedByMe);
 })
 
 export{
     getPosts,
     createPost,
-    getUserPosts,
+    getMyPosts,
     getMyAppliedPosts
 }
